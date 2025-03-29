@@ -38,19 +38,30 @@ ggplot(felicidad_2021, aes(x= Ladder.score, y= Logged.GDP.per.capita, color=))
 # Calcular los intervalos de confianza por país (o región)
 intervalos <- felicidad_temporal %>%
   group_by(Country.name) %>%
+  filter(n() > 1) %>%  # Filtrar países con al menos 2 observaciones
   summarize(
     media = mean(Life.Ladder, na.rm = TRUE),
     error = qt(0.975, df = n() - 1) * sd(Life.Ladder, na.rm = TRUE) / sqrt(n())
   ) %>%
   mutate(lower = media - error, upper = media + error)
 
+# Verificar el resultado
+print(intervalos)
+
+
+# Agregar una columna de índice al data frame de intervalos
+intervalos <- intervalos %>%
+  mutate(index = row_number())
 
 # Graficar los intervalos de confianza
-ggplot(intervalos, aes(x = row_number(), y = Country.name)) +
+ggplot(intervalos, aes(x = index, y = Country.name)) +
   geom_errorbarh(aes(xmin = lower, xmax = upper), height = 0.2, color = "blue") +
   geom_point(aes(x = media), color = "red") +
   labs(title = "Intervalos de Confianza por País", x = "Índice", y = "País") +
   theme_minimal()
+
+
+
 
 # Agrupar por año y calcular el índice de felicidad promedio
 serie_indice <- felicidad_temporal %>% 
@@ -93,13 +104,34 @@ library(GGally)
 felicidad_sin_pais <- felicidad_temporal %>% select(-Country.name)
 
 # Crear el pairplot sin el color por región
-ggpairs(felicidad_sin_pais, 
-        title = "Pairplot de las variables disponibles")
+#ggpairs(felicidad_sin_pais, 
+#        title = "Pairplot de las variables disponibles")
+#colnames(felicidad_temporal)
+#ggpairs(felicidad_temporal, 
+#        title = "Pairplot de las variables disponibles",
+#        #aes(color = factor(region)), 
+#        aes(color = factor(Country.name)),
+#        cardinality_threshold = 200) 
 
-colnames(felicidad_temporal)
+##
+###
+###
+# Cargar el paquete GGally
+if (!require(GGally)) install.packages("GGally")
+library(GGally)
+library(dplyr)
 
-ggpairs(felicidad_temporal, 
-        title = "Pairplot de las variables disponibles",
-        aes(color = factor(Region)), 
-        cardinality_threshold = 200) 
+# Filtrar columnas numéricas y eliminar columnas con más del 50% de NA
+felicidad_limpia <- felicidad_temporal %>%
+  select(where(is.numeric)) %>%
+  select(where(~ sum(is.na(.)) < 0.5 * length(.)))  # Ajuste para el cálculo correcto
+
+# Eliminar filas con NA restantes
+felicidad_limpia <- na.omit(felicidad_limpia)
+
+# Crear el pairplot con los datos limpios
+ggpairs(felicidad_limpia, 
+        title = "Pairplot de las variables disponibles (datos limpios)")
+
+
 
