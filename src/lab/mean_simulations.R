@@ -1,6 +1,7 @@
 #' @CasoUnivariado: una variable y su promedio
 
-#dnorm(0)
+source("src/helpers/test.R")
+       #dnorm(0)
 #dnorm(0.5)
 #dnorm(n=100)
 x <- rnorm(n=100)
@@ -65,6 +66,23 @@ plot(density(modelo$residuals))
 #plot(datos_multivariados)
 
 resettest(modelo)
+
+
+
+resumen <- summary(modelo)
+resumen$coefficients
+#FUNCION EJECUTANDO
+test_batery(modelo)
+
+
+
+
+
+
+
+
+
+
 
 
 
