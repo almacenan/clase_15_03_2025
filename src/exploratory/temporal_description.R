@@ -33,7 +33,7 @@ plot(density(felicidad_2021$Ladder.score))
 
 ggplot(felicidad_2021, aes(x= Ladder.score, y= Logged.GDP.per.capita, color=))
 
-
+### IC y Pairplot
 
 # Calcular los intervalos de confianza por país (o región)
 intervalos <- felicidad_temporal %>%
@@ -89,15 +89,6 @@ if (!require(GGally)) install.packages("GGally")
 # Generar el pairplot
 library(GGally)
 
-# Crear el pairplot con todas las variables disponibles
-#ggpairs(felicidad_temporal, 
-#        title = "Pairplot de las variables disponibles",
-#        aes(color = factor(region)))  # Puedes cambiar "region" según tu dataset
-
-# Crear el pairplot con todas las variables disponibles (sin la columna de países)
-#ggpairs(felicidad_sin_pais, 
-#       title = "Pairplot de las variables disponibles",
-#        aes(color = factor(region)))
 
 felicidad_sin_pais <- felicidad_temporal %>% select(-Country.name)
 
@@ -106,7 +97,6 @@ ggpairs(felicidad_sin_pais,
         title = "Pairplot de las variables disponibles")
 
 colnames(felicidad_temporal)
-
 
 ggpairs(felicidad_temporal, 
         title = "Pairplot de las variables disponibles",
