@@ -7,27 +7,20 @@ source("src/helpers/test.R")
 x <- rnorm(n=100)
 plot(density(x))
 
-
 y <- rexp(100)
 plot(density(y))
 
 #Variables aleatorioas
-
 y <- rexp(n=100, rate = 0.5)
 mean(y)
 
-
 #la semilla set.seed(1523) punto de partida de generacion de numeros aleatorios.
 set.seed(1523)
-
 medias_exp <- c() #Forma de generar arreglos vacios en R.
 
-
 for(i in 1:1000){
-  
   y <- rexp(n=100, rate = 0.5)
   medias_exp <- c(medias_exp, mean(y))
-  
 }
 
 plot(density(medias_exp))
@@ -73,17 +66,6 @@ resumen <- summary(modelo)
 resumen$coefficients
 #FUNCION EJECUTANDO
 test_batery(modelo)
-
-
-
-
-
-
-
-
-
-
-
 
 
 
